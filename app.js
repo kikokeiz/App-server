@@ -18,6 +18,7 @@ app.post('/api/crear', (req, res) => {
   });
 });
 
+// Iniciar servidor
 app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
+  console.log(`Servidor corriendo en el puerto ${port}`);
 });

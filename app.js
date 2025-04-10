@@ -7,7 +7,7 @@ const port = process.env.PORT || 8080;
 app.use(express.static(path.join(__dirname, 'public')));  // 'public' es la carpeta donde pondremos los archivos
 
 // Endpoint GET para servir el archivo HTML
-app.get('/', (req, res) => {
+app.get('/web', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));  // Cambia esto por la ubicación correcta si es necesario
 });
 

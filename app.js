@@ -1,14 +1,14 @@
 const express = require('express');
-const path = require('path');  // Esto es para gestionar rutas de archivos
+const path = require('path');
 const app = express();
 const port = process.env.PORT || 8080;
 
-// Middleware para servir archivos estáticos (como HTML, CSS, JS, etc.)
-app.use(express.static(path.join(__dirname, 'public')));  // 'public' es la carpeta donde pondremos los archivos
+// Servir archivos estáticos desde la carpeta 'public'
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Endpoint GET para servir el archivo HTML
+// Endpoint para servir el HTML desde /web
 app.get('/web', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));  // Cambia esto por la ubicación correcta si es necesario
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Endpoint GET para la API
@@ -16,7 +16,10 @@ app.get('/api', (req, res) => {
   res.json({ message: "¡Hola desde la API!" });
 });
 
-// Servir API POST
+// Middleware para leer JSON en POST
+app.use(express.json());
+
+// Endpoint POST de ejemplo
 app.post('/api/crear', (req, res) => {
   const { nombre, email } = req.body;
   res.json({
@@ -24,6 +27,7 @@ app.post('/api/crear', (req, res) => {
   });
 });
 
+// Iniciar el servidor
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });

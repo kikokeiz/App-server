@@ -8,8 +8,9 @@ const bcrypt = require('bcryptjs');
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Conexión a MongoDB
-mongoose.connect('mongodb+srv://<usuario>:<contraseña>@cluster0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
+// Conexión a MongoDB usando la variable de entorno
+const mongoURI = process.env.MONGODB_URI; // Usar la URI de MongoDB de las variables de entorno
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -47,9 +48,9 @@ app.post('/api/register', async (req, res) => {
     user = new User({ username, email, password });
     await user.save();
 
-    // Crear el token JWT
+    // Crear el token JWT usando la variable de entorno JWT_SECRET
     const payload = { userId: user._id };
-    const token = jwt.sign(payload, 'mi-secreto', { expiresIn: '1h' });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     res.status(201).json({ token });
   } catch (err) {
@@ -75,9 +76,9 @@ app.post('/api/login', async (req, res) => {
       return res.status(400).json({ msg: 'Credenciales incorrectas' });
     }
 
-    // Crear el token JWT
+    // Crear el token JWT usando la variable de entorno JWT_SECRET
     const payload = { userId: user._id };
-    const token = jwt.sign(payload, 'mi-secreto', { expiresIn: '1h' });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     res.json({ token });
   } catch (err) {
@@ -92,7 +93,7 @@ const authMiddleware = (req, res, next) => {
   if (!token) return res.status(401).json({ msg: 'No hay token, autorización denegada' });
 
   try {
-    const decoded = jwt.verify(token, 'mi-secreto');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded.userId;
     next();
   } catch (err) {

@@ -1,7 +1,7 @@
 // app.js
 const express = require('express');
 const path = require('path');
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 const User = require('./models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -9,13 +9,13 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Conexión a MongoDB usando la variable de entorno
-const mongoURI = process.env.MONGODB_URI; // Usar la URI de MongoDB de las variables de entorno
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => console.log('Conectado a MongoDB'))
-  .catch(err => console.log(err));
+//const mongoURI = process.env.MONGODB_URI; // Usar la URI de MongoDB de las variables de entorno
+//mongoose.connect(mongoURI, {
+//  useNewUrlParser: true,
+//  useUnifiedTopology: true,
+//})
+//  .then(() => console.log('Conectado a MongoDB'))
+//  .catch(err => console.log(err));
 
 // Servir archivos estáticos desde la carpeta 'public'
 app.use(express.static(path.join(__dirname, 'public')));

@@ -1,17 +1,13 @@
-// models/User.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-// Definir el esquema de usuario
 const UserSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
+  username: { type: String, required: true },
+  email:    { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  resetToken: { type: String } ,
-  resetTokenExpiry: { type: Date }
 });
 
-// Método para encriptar la contraseña antes de guardar
+// Encriptar contraseña antes de guardar
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
@@ -19,11 +15,9 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-// Método para comparar la contraseña con la guardada
-UserSchema.methods.comparePassword = function (password) {
+// Comparar contraseñas
+UserSchema.methods.comparePassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-const User = mongoose.model('User', UserSchema);
-
-module.exports = User;
+module.exports = mongoose.model('User', UserSchema);
